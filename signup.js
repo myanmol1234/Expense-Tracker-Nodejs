@@ -135,13 +135,15 @@ function addNewExpense(event)
                     {
                         //console.log(varr);
                         const shub=response.data.expenses;
-                       
+                       const xay=response.data.expenses.id;
                             const arr=document.getElementById("listOfExpenses");
                             shub.forEach(txt => {
                     
-                                const vrr=document.createElement("li");
-                                vrr.innerHTML=`${txt.expenseamount}-${txt.category}-${txt.description}`;
-                                arr.appendChild(vrr);
+                              //  const vrr=document.createElement("li");
+                              //  vrr.innerHTML=`${txt.expenseamount}-${txt.category}-${txt.description}`;
+                              //  arr.appendChild(vrr);
+
+                                addNewExpensetoUI(txt);
                             });
                     }
                  
@@ -151,87 +153,43 @@ function addNewExpense(event)
             }
         })
     });
-/*
-function addNewExpensetoUI(varr){
-    //console.log(varr);
-    const shub=response.data.expenses;
-   
-        const arr=document.getElementById("listOfExpenses");
-        shub.forEach(txt => {
 
-            const vrr=document.createElement("li");
-            vrr.innerHTML=`${txt.expenseamount}-${txt.category}-${txt.description}`;
-            arr.appendChild(vrr);
-        });
-}
+    function addNewExpensetoUI(expense){
+        const parentElement = document.getElementById('listOfExpenses');
+        const expenseElemId = `expense-${expense.id}`;
+        parentElement.innerHTML += `
+            <li id=${expenseElemId}>
+                ${expense.expenseamount} - ${expense.category} - ${expense.description}
+                <button onclick='deleteExpense(event, ${expense.id})'>
+                    Delete Expense
+                </button>
+            </li>`
+    }
+    
+    function deleteExpense(e, expenseid) {
+        const token = localStorage.getItem('token');
+        console.log("delete ke id",expenseid);
+        axios.delete(`http://localhost:3000/deleteexpense/${expenseid}`, { headers: {"Authorization" : token} }).then((response) => {
+    
+        if(response.status === 204){
+                removeExpensefromUI(expenseid);
+            } else {
+                throw new Error('Failed to delete');
+            }
+        }).catch((err => {
+            showError(err);
+        }))
+    }
+    
+    function showError(err){
+        document.body.innerHTML += `<div style="color:red;"> ${err}</div>`
+    }
+    
+    function removeExpensefromUI(expenseid){
+        const expenseElemId = `expense-${expenseid}`;
+        document.getElementById(expenseElemId).remove();
+    }
 
-function deleteExpense(e, expenseid) {
-   // const token = localStorage.getItem('token');
-    axios.delete(`http://localhost:3000/user/deleteexpense/${expenseid}`).then((response) => {
 
-    if(response.status === 204){
-            removeExpensefromUI(expenseid);
-        } else {
-            throw new Error('Failed to delete');
-        }
-    }).catch((err => {
-        showError(err);
-    }))
-}
-*/
 
-function showError(err){
-    document.body.innerHTML += `<div style="color:red;"> ${err}</div>`
-}
 
-function removeExpensefromUI(expenseid){
-    const expenseElemId = `expense-${expenseid}`;
-    document.getElementById(expenseElemId).remove();
-}
-
-/*
-document.getElementById('rzp-button1').onclick = async function (e) {
-    alert("premium members door")
-    const response  = await axios.get('http://localhost:3000/premiummembership', { headers: {"Authorization" : token} });
-    console.log(response);
-    var options =
-    {
-     "key": response.data.rzp_test_3Gj1KcjHiTWe3H, // Enter the Key ID generated from the Dashboard
-     "name": "Test Company",
-     "order_id": response.data.order.id, // For one time payment
-     "prefill": {
-       "name": "Test User",
-       "email": "test.user@example.com",
-       "contact": "7003442036"
-     },
-     "theme": {
-      "color": "#3399cc"
-     },
-     // This handler function will handle the success payment
-     "handler": function (response) {
-         console.log(response);
-         axios.post('http://localhost:3000/updatetransactionstatus',{
-             order_id: options.order_id,
-             payment_id: response.razorpay_payment_id,
-         }, { headers: {"Authorization" : token} }).then(() => {
-             alert('You are a Premium User Now')
-         }).catch(() => {
-             alert('Something went wrong. Try Again!!!')
-         })
-     },
-  };
-  const rzp1 = new Razorpay(options);
-  rzp1.open();
-  e.preventDefault();
-
-  rzp1.on('payment.failed', function (response){
-  alert(response.error.code);
-  alert(response.error.description);
-  alert(response.error.source);
-  alert(response.error.step);
-  alert(response.error.reason);
-  alert(response.error.metadata.order_id);
-  alert(response.error.metadata.payment_id);
- });
-}
-*/

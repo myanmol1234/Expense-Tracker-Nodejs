@@ -3,7 +3,7 @@ const Expense = require('../models/expense');
 const addexpense = (req, res) => {
     const { expenseamount, description, category } = req.body;
 
-    Expense.create({expenseamount, description, category })
+    Expense.create({expenseamount, description, category ,userId:req.user.id})
         .then(expense => {
         return res.status(201).json({expense, success: true } );
     }).catch(err => {
