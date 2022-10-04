@@ -4,7 +4,7 @@ var bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 
 function generateAccessToken(id) {
-  return jwt.sign(id,'ssfffsssfdd');
+  return jwt.sign(id,'secret-key');
 }
 
 exports.signup = (req, res)=>
@@ -42,7 +42,7 @@ exports.login = (req, res, next) => {
  }
  User.findAll({where:{email}}).then(user=>
   {
-    console.log("finalall is ",user[0]);
+    console.log("finalall is ",user);
     
     if(user.length>0)
     {
