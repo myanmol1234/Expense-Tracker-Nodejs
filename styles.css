@@ -82,8 +82,20 @@ button {
     box-shadow: 14px 14px 20px #cbced1, -14px -14px 20px white;
     border-radius: 20px;
     border-color: black;
+
     
 }
+
+body {
+  background-image: url("./finalimag.jpg");
+  background-repeat: no-repeat;
+  background-position: left;
+  margin-left: 500px;
+ 
+  
+}
+
+
 
 
 

@@ -1,7 +1,11 @@
 
 const User = require('../models/User');
 var bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
 
+function generateAccessToken(id) {
+  return jwt.sign(id,'ssfffsssfdd');
+}
 
 exports.signup = (req, res)=>
 {
@@ -38,13 +42,16 @@ exports.login = (req, res, next) => {
  }
  User.findAll({where:{email}}).then(user=>
   {
-    console.log(user);
+    console.log("finalall is ",user[0]);
+    
     if(user.length>0)
     {
       bcrypt.compare(password, user[0].password,(err, response)=>
       {
         if(!err){
-          res.status(201).json({success:true,message:"user logged in Successfully"})
+          const jwttoken = generateAccessToken(user[0].id);
+        
+          res.status(201).json({token: jwttoken, success: true, message: 'Successfully Logged In'});
         }
        
         else
