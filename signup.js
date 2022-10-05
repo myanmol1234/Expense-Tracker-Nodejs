@@ -58,7 +58,7 @@ function login(event)
     axios.post("http://localhost:3000/login",logindetails)
     .then((response) => {
         if(response.status==201)
-        { alert(response.data.message)
+        { console.log("return response from login",response.data.message);
             localStorage.setItem('token',response.data.token);
            
             window.location.href="./expense.html"
