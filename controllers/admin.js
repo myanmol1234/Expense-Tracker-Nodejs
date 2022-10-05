@@ -42,13 +42,13 @@ exports.login = (req, res, next) => {
  }
  User.findAll({where:{email}}).then(user=>
   {
-    console.log("finalall is ",user);
+    console.log("finalall is ",user[0].password);
     
     if(user.length>0)
     {
       bcrypt.compare(password, user[0].password,(err, response)=>
       {
-        if(!err){
+        if(response){
           const jwttoken = generateAccessToken(user[0].id);
         
           res.status(201).json({token: jwttoken, success: true, message: 'Successfully Logged In'});

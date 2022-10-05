@@ -11,6 +11,7 @@ const authenticate = (req, res, next) => {
         User.findByPk(user).then(user => {
             console.log(JSON.stringify(user));
             req.user = user;
+            //console.log("reqbodyyyy",req.body.user);
             next();
         }).catch(err => { throw new Error(err)})
 
